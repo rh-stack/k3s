@@ -81,7 +81,7 @@ The agent prepares the initial commit: GOAL.md, IMPLEMENTATION.md, and the app m
 
 ### 1.5 Deploy Jellyfin
 
-Plain manifests in `apps/jellyfin/`: namespace `media`, PVC on `local-path`, Deployment, ClusterIP Service, Traefik Ingress at `jf.k3s.local`.
+Plain manifests in `apps/jellyfin/`: namespace `media`, PVC on `local-path`, Deployment, ClusterIP Service, Traefik Ingress at `jf.k3s.lan`.
 Images pinned, media volume mounted read-only at `/media`.
 CPU transcode only; GPU comes later.
 
@@ -90,13 +90,13 @@ Apply and verify:
 ```bash
 kubectl apply -f apps/jellyfin/
 kubectl -n media get pods,pvc,ingress
-curl -I --resolve jf.k3s.local:80:<node-ip> http://jf.k3s.local
+curl -I --resolve jf.k3s.lan:80:<node-ip> http://jf.k3s.lan
 ```
 
 **[You]**
 
 - Copy your existing Jellyfin media from the old Docker host into the PVC directory under `/var/lib/rancher/k3s/storage/` (agent gives you the exact path once the PVC binds), then restart the pod.
-- Add `jf.k3s.local` to your LAN DNS or, for testing only, your workstation hosts file.
+- Add `jf.k3s.lan` to your LAN DNS or, for testing only, your workstation hosts file.
 - Confirm playback and a library scan in the browser.
 
 ### 1.6 Deploy qBittorrent + gluetun
