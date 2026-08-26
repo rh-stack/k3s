@@ -102,7 +102,7 @@ curl -I --resolve jf.k3s.lan:80:<node-ip> http://jf.k3s.lan
 ### 1.6 Deploy qBittorrent + gluetun
 
 Plain manifests in `apps/qbittorrent/`: single pod, gluetun sidecar holding the network namespace, qBittorrent container with no ports of its own, two PVCs (config, downloads).
-Web UI through a Service + Traefik Ingress at `qbittorrent.homelab.local`; the gluetun liveness probe restarts the pod if the VPN dies.
+Web UI through a Service + Traefik Ingress at `qb.k3s.lan`; the gluetun liveness probe restarts the pod if the VPN dies.
 
 **[You]** You need a WireGuard configuration from a commercial VPN provider (Mullvad, Proton, and similar).
 If you do not have one, register now - this is an external signup, not something the agent can do.
@@ -145,7 +145,7 @@ Agent commits `.sops.yaml` with creation rules.
 
 ### 2.2 Install Argo CD
 
-One-time bootstrap exception: install via HelmChart CR or helm CLI, expose through Traefik at `argocd.homelab.local`, change the initial admin password immediately.
+One-time bootstrap exception: install via HelmChart CR or helm CLI, expose through Traefik at `argocd.k3s.lan`, change the initial admin password immediately.
 **[You]** Log in, change the password, and approve the install.
 
 ### 2.3 Install the KSOPS plugin
