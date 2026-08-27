@@ -35,6 +35,13 @@ spec:
             # Proton-specific: pick a country or leave default (random). Uncomment to pin:
             # - name: SERVER_COUNTRIES
             #   value: Netherlands
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - (ip rule del table 51820; ip -6 rule del table 51820) || true
           securityContext:
             capabilities:
               add:
@@ -48,16 +55,14 @@ spec:
             - containerPort: 6881
               name: torrent-udp
               protocol: UDP
-          # gluetun exposes a control server on 8000; path name stays /v1/openvpn/status even for wireguard.
+          # Control server requires auth on this image (401 on httpGet), so probe TCP instead.
           livenessProbe:
-            httpGet:
-              path: /v1/openvpn/status
+            tcpSocket:
               port: 8000
             initialDelaySeconds: 30
             periodSeconds: 15
           readinessProbe:
-            httpGet:
-              path: /v1/openvpn/status
+            tcpSocket:
               port: 8000
             initialDelaySeconds: 10
             periodSeconds: 10
