@@ -155,8 +155,8 @@ Test the decrypt path with one dummy encrypted Secret before touching real apps.
 
 ### 2.4 Convert phase 1 apps to Argo CD
 
-Wrap each `apps/<app>/` in a `kustomization.yaml`, add one Application manifest per app under `clusters/home/argocd-apps/`, re-encrypt the gluetun secret as a SOPS file.
-Adopt the running workloads: let Argo CD sync over the manually applied resources and watch for drift until sync is clean.
+Wrap each `apps/<app>/` in a `kustomization.yaml`, add one Application manifest per app under `clusters/home/argocd-apps/`, re-encrypt the gluetun secret as a SOPS file (custom WireGuard: `WIREGUARD_PRIVATE_KEY` on `NL-FREE#156` at `185.107.56.22:51820`, `WIREGUARD_ALLOWED_IPS=0.0.0.0/0`, `userspace` impl).
+Bulk data is now `hostPath` on the 250GB data disk (`/srv/data/media`, `/srv/data/downloads`), not PVCs. Adopt the running workloads: let Argo CD sync over the manually applied resources, verify `hostPath` `Directory` exists on the node, and watch for drift until sync is clean. Both `hostPath` and `local-path` are node-local and unreplicated - acceptable for phase 1, same caveat as 3.2.
 From here the standing rule returns: agent proposes commits, you review and merge, Argo CD syncs.
 
 **[You]** Watch several propose -> review -> merge -> sync loops before granting any automation trust (per GOAL.md agent rules).
@@ -174,15 +174,15 @@ Verify both UIs from the LAN.
 
 Chart `immich` from `https://immich-app.github.io/immich-charts` (verified live, 5.0.1 at review time).
 Postgres password and API keys go through SOPS.
-PVC on `local-path` short-term.
-**[You]** Migrate your existing photos/library from the old host into the library PVC.
+Short-term: library PVC on `local-path` on the 32GB system disk works but fills quickly. Reuse the phase 1 pattern and put the library on `hostPath` `/srv/data/immich/library` on the 250GB data disk (`/dev/sdb`) until NFS/Longhorn exists. Postgres can stay as PVC short-term.
+**[You]** Migrate your existing photos/library from the old host into the library PVC or `hostPath` directory.
 
 ### 3.2 Storage decision point
 
 Reassess storage before or right after Immich accumulates data:
-local-path is node-local and unreplicated, which is acceptable for phase 1 but not for a growing photo library.
+Both `local-path` (config PVCs on `sda` 32GB) and `hostPath` (bulk on `sdb` 250GB at `/srv/data`) are node-local and unreplicated, which is acceptable for phase 1 but not for a growing photo library.
 Choose NFS-backed PVCs (needs a NAS - **[You]** hardware and setup) or Longhorn, per the Storage reference.
-Move Immich Postgres and library data only after a tested backup exists.
+Move Immich Postgres and library data only after a tested backup exists. When choosing, decide together whether Jellyfin/qBittorrent bulk stays on `hostPath` or moves to the new shared storage.
 
 ### 3.3 Remaining apps
 
