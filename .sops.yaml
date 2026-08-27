@@ -23,11 +23,11 @@
 # sops-age Secret in namespace argocd so KSOPS can decrypt at sync time.
 creation_rules:
   - path_regex: secrets/.*\.enc\.yaml$
-    age: age1REPLACE_WITH_YOUR_AGE_PUBLIC_KEY
+    age: age1xt6wrssyc8t3ykj4dxg9pgk0yd95lpumqvgw5jaz3hgecutcsvss8rwcd3
     encrypted_regex: '^(data|stringData)$'
   - path_regex: apps/.*/secrets\.enc\.yaml$
-    age: age1REPLACE_WITH_YOUR_AGE_PUBLIC_KEY
+    age: age1xt6wrssyc8t3ykj4dxg9pgk0yd95lpumqvgw5jaz3hgecutcsvss8rwcd3
     encrypted_regex: '^(data|stringData)$'
   - path_regex: apps/.*/secret\.enc\.yaml$
-    age: age1REPLACE_WITH_YOUR_AGE_PUBLIC_KEY
+    age: age1xt6wrssyc8t3ykj4dxg9pgk0yd95lpumqvgw5jaz3hgecutcsvss8rwcd3
     encrypted_regex: '^(data|stringData)$'
