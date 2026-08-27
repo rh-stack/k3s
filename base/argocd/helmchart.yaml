@@ -13,6 +13,8 @@ spec:
     configs:
       params:
         server.insecure: true
+      cm:
+        kustomize.buildOptions: --enable-alpha-plugins --enable-exec
     global:
       domain: argocd.k3s.lan
     server:
@@ -20,3 +22,32 @@ spec:
         enabled: true
         ingressClassName: traefik
         hostname: argocd.k3s.lan
+    repoServer:
+      volumes:
+        - name: sops-age
+          secret:
+            secretName: sops-age
+        - name: custom-tools
+          emptyDir: {}
+      initContainers:
+        - name: install-ksops
+          image: alpine:3.20
+          command: [sh, -c]
+          args:
+            - |
+              wget -qO- https://github.com/viaduct-ai/kustomize-sops/releases/download/v4.5.1/ksops_4.5.1_Linux_x86_64.tar.gz | tar -xz -C /custom-tools &&
+              wget -qO /custom-tools/sops https://github.com/getsops/sops/releases/download/v3.13.3/sops-v3.13.3.linux.amd64 &&
+              chmod +x /custom-tools/*
+          volumeMounts:
+            - name: custom-tools
+              mountPath: /custom-tools
+      volumeMounts:
+        - name: sops-age
+          mountPath: /home/argocd/.config/sops/age
+          readOnly: true
+        - name: custom-tools
+          mountPath: /usr/local/bin/ksops
+          subPath: ksops
+        - name: custom-tools
+          mountPath: /usr/local/bin/sops
+          subPath: sops
