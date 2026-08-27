@@ -117,5 +117,6 @@ spec:
           persistentVolumeClaim:
             claimName: qbittorrent-config
         - name: downloads
-          persistentVolumeClaim:
-            claimName: qbittorrent-downloads
+          hostPath:
+            path: /srv/data/downloads
+            type: Directory

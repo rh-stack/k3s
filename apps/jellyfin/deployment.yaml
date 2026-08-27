@@ -57,5 +57,6 @@ spec:
         - name: cache
           emptyDir: {}
         - name: media
-          persistentVolumeClaim:
-            claimName: jellyfin-media
+          hostPath:
+            path: /srv/data/media
+            type: Directory

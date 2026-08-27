@@ -81,8 +81,8 @@ The agent prepares the initial commit: GOAL.md, IMPLEMENTATION.md, and the app m
 
 ### 1.5 Deploy Jellyfin
 
-Plain manifests in `apps/jellyfin/`: namespace `media`, PVC on `local-path`, Deployment, ClusterIP Service, Traefik Ingress at `jf.k3s.lan`.
-Images pinned, media volume mounted read-only at `/media`.
+Plain manifests in `apps/jellyfin/`: namespace `media`, PVC `jellyfin-config` on `local-path` + `hostPath` `/srv/data/media` (250GB data disk `/dev/sdb` at `/srv/data`, re-attached from `vm-101`), Deployment, ClusterIP Service, Traefik Ingress at `jf.k3s.lan`.
+Media volume mounted read-only at `/media`. Config stays on the 32GB system disk so bulk data does not waste it.
 CPU transcode only; GPU comes later.
 
 Apply and verify:
@@ -95,13 +95,13 @@ curl -I --resolve jf.k3s.lan:80:<node-ip> http://jf.k3s.lan
 
 **[You]**
 
-- Copy your existing Jellyfin media from the old Docker host into the PVC directory under `/var/lib/rancher/k3s/storage/` (agent gives you the exact path once the PVC binds), then restart the pod.
+- The 250GB data disk (`/dev/sdb`, `ext4`, `UUID=199a30e2-2775-429b-b0c5-f56d7146de9c`) is mounted at `/srv/data` via `/etc/fstab`. Media already lives at `/srv/data/media` (`_movies`, `_shows`) after the Proxmox re-attach - verify with `ls -lh /srv/data/media`, no PVC copy needed. A temporary read-only check mount was `mount -o ro /dev/sdb /mnt/sdb_check`.
 - Add `jf.k3s.lan` to your LAN DNS or, for testing only, your workstation hosts file.
 - Confirm playback and a library scan in the browser.
 
 ### 1.6 Deploy qBittorrent + gluetun
 
-Plain manifests in `apps/qbittorrent/`: single pod, gluetun sidecar holding the network namespace, qBittorrent container with no ports of its own, two PVCs (config, downloads).
+Plain manifests in `apps/qbittorrent/`: single pod, gluetun sidecar holding the network namespace, qBittorrent container with no ports of its own, PVC `qbittorrent-config` on `local-path` + `hostPath` `/srv/data/downloads` on the 250GB data disk.
 Web UI through a Service + Traefik Ingress at `qb.k3s.lan`; the gluetun liveness probe restarts the pod if the VPN dies.
 
 **[You]** You need a WireGuard configuration from a commercial VPN provider (Mullvad, Proton, and similar).
