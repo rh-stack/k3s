@@ -21,7 +21,7 @@ spec:
           image: qmcgaw/gluetun:latest@sha256:8e92dcb57ed64b0e4469c933f00ef1e09ee00867fee150e783a95fa6b53effa4
           env:
             - name: VPN_SERVICE_PROVIDER
-              value: protonvpn
+              value: custom
             - name: VPN_TYPE
               value: wireguard
             - name: WIREGUARD_PRIVATE_KEY
@@ -29,12 +29,27 @@ spec:
                 secretKeyRef:
                   name: gluetun-secrets
                   key: WIREGUARD_PRIVATE_KEY
-            # Allow k8s pod/service nets so probes and DNS still work inside the tunnel.
+            - name: WIREGUARD_ADDRESSES
+              value: "10.2.0.2/32"
+            - name: WIREGUARD_PUBLIC_KEY
+              value: "pUY22Gd3zhSoZZO6p0rxg2F96gwNgkpFjYSun4TWf2s="
+            - name: WIREGUARD_ENDPOINT_IP
+              value: "185.107.56.22"
+            - name: WIREGUARD_ENDPOINT_PORT
+              value: "51820"
+            - name: WIREGUARD_ALLOWED_IPS
+              value: "0.0.0.0/0"
+            - name: WIREGUARD_IMPLEMENTATION
+              value: "userspace"
+            # Allow k8s pod/service nets plus Proton DNS so probes and DNS still work inside the tunnel.
             - name: FIREWALL_OUTBOUND_SUBNETS
-              value: "10.42.0.0/16,10.43.0.0/16"
-            # Proton-specific: pick a country or leave default (random). Uncomment to pin:
-            # - name: SERVER_COUNTRIES
-            #   value: Netherlands
+              value: "10.42.0.0/16,10.43.0.0/16,10.2.0.1/32"
+            - name: DNS_UPSTREAM_RESOLVER_TYPE
+              value: "plain"
+            - name: DNS_UPSTREAM_PLAIN_ADDRESSES
+              value: "1.1.1.1:53"
+            - name: HEALTH_RESTART_VPN
+              value: "on"
           lifecycle:
             postStart:
               exec:
