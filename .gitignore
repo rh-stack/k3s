@@ -1,0 +1,17 @@
+# SOPS plaintext secrets - only *.enc.yaml is committed.
+# Any file named secrets.yaml or secret.yaml is ignored so plaintext is never committed.
+secrets.yaml
+secrets.yml
+secret.yaml
+secret.yml
+
+# Age private keys must never be committed.
+*.key
+keys.txt
+age.txt
+**/.config/sops/age/keys.txt
+
+# OS and editor noise.
+.DS_Store
+*.swp
+*~

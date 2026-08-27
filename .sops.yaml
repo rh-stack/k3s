@@ -1,0 +1,33 @@
+# SOPS creation rules - age encryption for GitOps (KSOPS).
+# Every file that matches path_regex is encrypted to the listed age recipient.
+# Only data and stringData keys are encrypted so metadata stays readable in git.
+#
+# Setup (run once, on your workstation or this VM):
+#   1. Install age and sops:
+#        sudo apt-get install age
+#        # sops binary from https://github.com/getsops/sops/releases
+#        # example: curl -Lo sops https://github.com/getsops/sops/releases/download/v3.13.3/sops-v3.13.3.linux.amd64
+#        # chmod +x sops && sudo mv sops /usr/local/bin/sops
+#   2. Generate the age keypair (private key stays offline, never commit it):
+#        mkdir -p ~/.config/sops/age
+#        age-keygen -o ~/.config/sops/age/keys.txt
+#        # Output shows: # public key: age1...
+#        # Back up keys.txt to a password manager or printed paper.
+#   3. Replace the placeholder age1... values below with your real public key.
+#   4. Test the encrypt path:
+#        sops --encrypt apps/jellyfin/secrets.yaml > apps/jellyfin/secrets.enc.yaml
+#        sops --decrypt apps/jellyfin/secrets.enc.yaml
+#        rm apps/jellyfin/secrets.yaml   # never commit plaintext
+#
+# Argo CD decrypt path (phase 2.3) will mount the same private key as the
+# sops-age Secret in namespace argocd so KSOPS can decrypt at sync time.
+creation_rules:
+  - path_regex: secrets/.*\.enc\.yaml$
+    age: age1REPLACE_WITH_YOUR_AGE_PUBLIC_KEY
+    encrypted_regex: '^(data|stringData)$'
+  - path_regex: apps/.*/secrets\.enc\.yaml$
+    age: age1REPLACE_WITH_YOUR_AGE_PUBLIC_KEY
+    encrypted_regex: '^(data|stringData)$'
+  - path_regex: apps/.*/secret\.enc\.yaml$
+    age: age1REPLACE_WITH_YOUR_AGE_PUBLIC_KEY
+    encrypted_regex: '^(data|stringData)$'
