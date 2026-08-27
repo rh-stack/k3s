@@ -14,20 +14,25 @@
 #        # Output shows: # public key: age1...
 #        # Back up keys.txt to a password manager or printed paper.
 #   3. Replace the placeholder age1... values below with your real public key.
-#   4. Test the encrypt path:
-#        sops --encrypt apps/jellyfin/secrets.yaml > apps/jellyfin/secrets.enc.yaml
-#        sops --decrypt apps/jellyfin/secrets.enc.yaml
-#        rm apps/jellyfin/secrets.yaml   # never commit plaintext
+#   4. Test the encrypt path (run from repo root so .sops.yaml is found):
+#        printf 'apiVersion: v1\nkind: Secret\nmetadata:\n  name: test\n  namespace: media\nstringData:\n  foo: bar\n' > /tmp/test.yaml
+#        sops --encrypt --encrypted-regex '^(data|stringData)$' --age age1xt6wrssyc8t3ykj4dxg9pgk0yd95lpumqvgw5jaz3hgecutcsvss8rwcd3 /tmp/test.yaml > /tmp/test.enc.yaml
+#        sops --decrypt /tmp/test.enc.yaml
+#        # Or with .sops.yaml rules (file must be under secrets/ or apps/*/):
+#        # printf '...foo: bar...' > secrets/test.yaml
+#        # sops --encrypt secrets/test.yaml > secrets/test.enc.yaml
+#        # sops --decrypt secrets/test.enc.yaml
+#        rm /tmp/test.yaml /tmp/test.enc.yaml   # never commit plaintext
 #
 # Argo CD decrypt path (phase 2.3) will mount the same private key as the
 # sops-age Secret in namespace argocd so KSOPS can decrypt at sync time.
 creation_rules:
-  - path_regex: secrets/.*\.enc\.yaml$
+  - path_regex: secrets/.*\.yaml$
     age: age1xt6wrssyc8t3ykj4dxg9pgk0yd95lpumqvgw5jaz3hgecutcsvss8rwcd3
     encrypted_regex: '^(data|stringData)$'
-  - path_regex: apps/.*/secrets\.enc\.yaml$
+  - path_regex: apps/.*/secrets(\.enc)?\.yaml$
     age: age1xt6wrssyc8t3ykj4dxg9pgk0yd95lpumqvgw5jaz3hgecutcsvss8rwcd3
     encrypted_regex: '^(data|stringData)$'
-  - path_regex: apps/.*/secret\.enc\.yaml$
+  - path_regex: apps/.*/secret(\.enc)?\.yaml$
     age: age1xt6wrssyc8t3ykj4dxg9pgk0yd95lpumqvgw5jaz3hgecutcsvss8rwcd3
     encrypted_regex: '^(data|stringData)$'
