@@ -7,6 +7,6 @@ ingress:
     - host: headlamp.k3s.lan
       paths:
         - path: /
-          pathType: Prefix
+          type: Prefix
 config:
   baseURL: ""
