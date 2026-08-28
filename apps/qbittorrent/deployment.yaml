@@ -32,13 +32,13 @@ spec:
             - name: WIREGUARD_ADDRESSES
               value: "10.2.0.2/32"
             - name: WIREGUARD_PUBLIC_KEY
-              value: "pUY22Gd3zhSoZZO6p0rxg2F96gwNgkpFjYSun4TWf2s="
+              value: "OFlzJwrpDCqqTYTUQxu9y9Dch5SDQzaEkzuKaE0eJ1E="
             - name: WIREGUARD_ENDPOINT_IP
-              value: "185.107.56.22"
+              value: "212.8.249.202"
             - name: WIREGUARD_ENDPOINT_PORT
               value: "51820"
             - name: WIREGUARD_ALLOWED_IPS
-              value: "0.0.0.0/0"
+              value: "0.0.0.0/0,::/0"
             - name: WIREGUARD_IMPLEMENTATION
               value: "userspace"
             # Allow k8s pod/service nets plus Proton DNS so probes and DNS still work inside the tunnel.
