@@ -1,0 +1,12 @@
+ingress:
+  enabled: true
+  ingressClassName: traefik
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+  hosts:
+    - host: headlamp.k3s.lan
+      paths:
+        - path: /
+          pathType: Prefix
+config:
+  baseURL: ""

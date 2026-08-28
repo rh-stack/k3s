@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: homepage
+  namespace: homepage
+  labels:
+    app.kubernetes.io/name: homepage
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: Cluster
+    gethomepage.dev/name: Homepage
+    gethomepage.dev/icon: homepage
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: home.k3s.lan
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: homepage
+                port:
+                  number: 3000
