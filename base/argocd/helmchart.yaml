@@ -46,7 +46,7 @@ spec:
           mountPath: /home/argocd/.config/sops/age
           readOnly: true
         - name: custom-tools
-          mountPath: /usr/local/bin/ksops
+          mountPath: /home/argocd/.config/kustomize/plugin/viaduct.ai/v1/ksops/ksops
           subPath: ksops
         - name: custom-tools
           mountPath: /usr/local/bin/sops
