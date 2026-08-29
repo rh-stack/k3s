@@ -16,8 +16,7 @@ data:
     statusStyle: dot
     hideVersion: true
     target: _blank
-    background: https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?q=80&w=2070
-    backgroundOpacity: 35
+    backgroundOpacity: 0
     cardBlur: sm
     layout:
       Media:
@@ -28,21 +27,22 @@ data:
         columns: 2
   custom.css: |
     /* phthalo green background */
-    html {
-      background-color: #123524 !important;
-    }
-    body {
+    html, body, #page, main {
       background-color: #123524 !important;
       background-image: none !important;
     }
-    /* semitransparent cards */
-    .bg-theme-200\/50 {
-      background-color: rgba(24, 24, 27, 0.6) !important;
+    /* semitransparent cards and header blocks */
+    .bg-theme-200\/50, .bg-white\/10, [class*="bg-theme"] {
+      background-color: rgba(24, 24, 27, 0.55) !important;
       backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.08);
     }
-    /* header widgets on own background */
-    #header {
-      gap: 0.75rem;
+    /* header each widget on own background */
+    header > div > div {
+      background: rgba(24, 24, 27, 0.6) !important;
+      border-radius: 0.5rem;
+      padding: 0.4rem 0.6rem;
+      backdrop-filter: blur(6px);
     }
   custom.js: ""
   bookmarks.yaml: |
@@ -68,7 +68,7 @@ data:
             description: Cluster view
         - Argo CD:
             href: http://argocd.k3s.lan
-            icon: argocd
+            icon: argo-cd
             description: GitOps sync
             widget:
               type: argocd
@@ -92,8 +92,8 @@ data:
         expanded: false
         cpu: false
         memory: false
-        disk: /srv/data
-        network: true
+        disk: /
+        network: false
     - search:
         provider: duckduckgo
         target: _blank

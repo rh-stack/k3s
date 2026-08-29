@@ -11,6 +11,7 @@ metadata:
     gethomepage.dev/group: Cluster
     gethomepage.dev/name: Homepage
     gethomepage.dev/icon: homepage
+    gethomepage.dev/description: Dashboard
 spec:
   ingressClassName: traefik
   rules:
