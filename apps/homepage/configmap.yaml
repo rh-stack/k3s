@@ -16,7 +16,7 @@ data:
     statusStyle: dot
     hideVersion: true
     target: _blank
-    background: https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2070
+    background: https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?q=80&w=2070
     backgroundOpacity: 35
     cardBlur: sm
     layout:
@@ -25,11 +25,24 @@ data:
         columns: 2
       Cluster:
         style: row
-        columns: 3
+        columns: 2
   custom.css: |
-    /* darker semitransparent cards - clean modern */
+    /* phthalo green background */
+    html {
+      background-color: #123524 !important;
+    }
+    body {
+      background-color: #123524 !important;
+      background-image: none !important;
+    }
+    /* semitransparent cards */
     .bg-theme-200\/50 {
       background-color: rgba(24, 24, 27, 0.6) !important;
+      backdrop-filter: blur(8px);
+    }
+    /* header widgets on own background */
+    #header {
+      gap: 0.75rem;
     }
   custom.js: ""
   bookmarks.yaml: |
@@ -38,10 +51,6 @@ data:
             - abbr: GH
               href: https://github.com/rh-stack/k3s
               icon: github
-        - Argo CD:
-            - abbr: AC
-              href: http://argocd.k3s.lan
-              icon: argo
   services.yaml: |
     - Media:
         - Jellyfin:
@@ -53,17 +62,13 @@ data:
             icon: qbittorrent
             description: Downloads via NL-FREE#239
     - Cluster:
-        - Homepage:
-            href: http://home.k3s.lan
-            icon: homepage
-            description: This dashboard
         - Headlamp:
             href: http://headlamp.k3s.lan
             icon: headlamp
             description: Cluster view
         - Argo CD:
             href: http://argocd.k3s.lan
-            icon: argo
+            icon: argocd
             description: GitOps sync
             widget:
               type: argocd
@@ -78,17 +83,17 @@ data:
           showLabel: true
           label: "cluster"
         nodes:
-          show: true
-          cpu: true
-          memory: true
-          showLabel: true
+          show: false
+          cpu: false
+          memory: false
+          showLabel: false
     - resources:
         backend: resources
-        expanded: true
-        cpu: true
-        memory: true
+        expanded: false
+        cpu: false
+        memory: false
         disk: /srv/data
-        network: default
+        network: true
     - search:
         provider: duckduckgo
         target: _blank
