@@ -11,11 +11,26 @@ data:
   settings.yaml: |
     title: Homelab
     theme: dark
-    color: slate
+    color: zinc
     headerStyle: clean
     statusStyle: dot
     hideVersion: true
-  custom.css: ""
+    target: _blank
+    background: https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2070
+    backgroundOpacity: 35
+    cardBlur: sm
+    layout:
+      Media:
+        style: row
+        columns: 2
+      Cluster:
+        style: row
+        columns: 3
+  custom.css: |
+    /* darker semitransparent cards - clean modern */
+    .bg-theme-200\/50 {
+      background-color: rgba(24, 24, 27, 0.6) !important;
+    }
   custom.js: ""
   bookmarks.yaml: |
     - Developer:
@@ -32,24 +47,24 @@ data:
         - Jellyfin:
             href: http://jf.k3s.lan
             icon: jellyfin
-            description: Media server
+            description: Stream movies and shows
         - qBittorrent:
             href: http://qb.k3s.lan
             icon: qbittorrent
-            description: Downloader via gluetun
+            description: Downloads via NL-FREE#239
     - Cluster:
         - Homepage:
             href: http://home.k3s.lan
             icon: homepage
-            description: Service launcher
+            description: This dashboard
         - Headlamp:
             href: http://headlamp.k3s.lan
             icon: headlamp
-            description: Cluster dashboard
+            description: Cluster view
         - Argo CD:
             href: http://argocd.k3s.lan
             icon: argo
-            description: GitOps
+            description: GitOps sync
   widgets.yaml: |
     - kubernetes:
         cluster:
@@ -68,6 +83,7 @@ data:
         expanded: true
         cpu: true
         memory: true
+        disk: /srv/data
         network: default
     - search:
         provider: duckduckgo
