@@ -26,23 +26,17 @@ data:
         style: row
         columns: 2
   custom.css: |
-    /* phthalo green background */
-    html, body, #page, main {
-      background-color: #123524 !important;
+    html, body {
+      background-color: #0f2a1a !important;
       background-image: none !important;
     }
-    /* semitransparent cards and header blocks */
-    .bg-theme-200\/50, .bg-white\/10, [class*="bg-theme"] {
-      background-color: rgba(24, 24, 27, 0.55) !important;
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.08);
+    #__next, main, div[data-testid="home"] {
+      background-color: #0f2a1a !important;
     }
-    /* header each widget on own background */
-    header > div > div {
-      background: rgba(24, 24, 27, 0.6) !important;
-      border-radius: 0.5rem;
-      padding: 0.4rem 0.6rem;
-      backdrop-filter: blur(6px);
+    .bg-theme-200\/50 {
+      background-color: rgba(30, 41, 35, 0.7) !important;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.06);
     }
   custom.js: ""
   bookmarks.yaml: |
@@ -89,7 +83,7 @@ data:
           showLabel: false
     - resources:
         backend: resources
-        expanded: false
+        expanded: true
         cpu: false
         memory: false
         disk: /
