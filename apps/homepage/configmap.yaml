@@ -68,7 +68,7 @@ data:
             widget:
               type: argocd
               url: http://argocd-server.argocd.svc.cluster.local
-              key: REPLACE_WITH_READONLY_TOKEN
+              key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhcmdvY2QiLCJzdWIiOiJyZWFkb25seTphcGlLZXkiLCJuYmYiOjE3ODgwMDQ1MTcsImlhdCI6MTc4ODAwNDUxNywianRpIjoiYzJiNmJlNzctZjU2ZS00NzdiLTg2MGUtMTgyNTg5Y2NlNzQxIn0.bOORtPJp8UxHJFZf04yaqEV-J0b8c4bCDSMA431PFDY
   widgets.yaml: |
     - kubernetes:
         cluster:

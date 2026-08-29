@@ -16,7 +16,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 88fdbf661448576eb7307e460eef062615ea8c7b1e5cef7894b820d12219f9ea
+        checksum/config: 9ce629ec674b08d1a8c766db728e37a0782ccc5a25ac868885abc13beff6bde2
       labels:
         app.kubernetes.io/name: homepage
     spec:
