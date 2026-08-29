@@ -6,6 +6,7 @@ metadata:
   labels:
     app: jellyfin
 spec:
+  revisionHistoryLimit: 3
   # Recreate avoids two pods contending for the same local-path volume.
   strategy:
     type: Recreate

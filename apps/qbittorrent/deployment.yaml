@@ -6,6 +6,7 @@ metadata:
   labels:
     app: qbittorrent
 spec:
+  revisionHistoryLimit: 3
   strategy:
     type: Recreate
   selector:
