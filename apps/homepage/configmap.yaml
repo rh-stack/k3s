@@ -44,7 +44,7 @@ data:
         - Github:
             - abbr: GH
               href: https://github.com/rh-stack/k3s
-              icon: github
+              icon: github-light
   services.yaml: |
     - Media:
         - Jellyfin:
@@ -74,7 +74,7 @@ data:
           show: true
           cpu: true
           memory: true
-          showLabel: true
+          showLabel: false
           label: "cluster"
         nodes:
           show: false
