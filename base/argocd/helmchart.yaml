@@ -15,6 +15,9 @@ spec:
         server.insecure: true
       cm:
         kustomize.buildOptions: --enable-alpha-plugins --enable-exec
+        accounts.readonly: apiKey
+      rbac:
+        policy.csv: "g, readonly, role:readonly"
     global:
       domain: argocd.k3s.lan
     server:

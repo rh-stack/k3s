@@ -65,6 +65,10 @@ data:
             href: http://argocd.k3s.lan
             icon: argo
             description: GitOps sync
+            widget:
+              type: argocd
+              url: http://argocd-server.argocd.svc.cluster.local
+              key: REPLACE_WITH_READONLY_TOKEN
   widgets.yaml: |
     - kubernetes:
         cluster:
