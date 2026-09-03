@@ -1,1 +1,10 @@
 secrets-encryption: true
+# Keep terminated pods from accumulating forever on a single-node cluster.
+# Default is 12500, which means 30 Evicted pods never get auto-GC'd.
+kube-controller-manager-arg:
+  - "terminated-pod-gc-threshold=10"
+# Earlier image GC reduces risk of DiskPressure (node had DiskPressure on 2026-08-31).
+# Defaults are 85/80, lower them slightly so containerd cleans earlier.
+kubelet-arg:
+  - "image-gc-high-threshold=80"
+  - "image-gc-low-threshold=70"

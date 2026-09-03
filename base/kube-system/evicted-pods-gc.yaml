@@ -1,0 +1,72 @@
+# CronJob to delete Evicted/Failed pods that the controller GC leaves behind.
+# On a single-node k3s the default terminated-pod-gc-threshold=12500 never triggers for 30 pods,
+# so Evicted pods from DiskPressure (2026-08-31) accumulated as Failed objects with reason Evicted.
+# This job is a safety net even after lowering the threshold in base/k3s/config.yaml.
+# Apply once: kubectl apply -f base/kube-system/evicted-pods-gc.yaml
+# Or manage via ArgoCD by adding an Application under clusters/home/argocd-apps/.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: evicted-pods-gc
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: evicted-pods-gc
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: evicted-pods-gc
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: evicted-pods-gc
+subjects:
+  - kind: ServiceAccount
+    name: evicted-pods-gc
+    namespace: kube-system
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: evicted-pods-gc
+  namespace: kube-system
+spec:
+  schedule: "0 * * * *"  # hourly
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: evicted-pods-gc
+          restartPolicy: OnFailure
+          containers:
+            - name: kubectl
+              image: bitnami/kubectl:1.36
+              command:
+                - /bin/sh
+                - -c
+                # Delete only Evicted pods, not every Failed pod (keeps Completed jobs).
+                # Adjust --field-selector if you also want to prune generic Failed pods.
+                - |
+                  set -eu
+                  echo "deleting Evicted pods..."
+                  kubectl delete pod -A --field-selector status.phase=Failed --ignore-not-found=true 2>&1 | head -20
+                  # stricter alternative, evicted-only:
+                  # kubectl get pods -A -o json | python3 -c "import json,subprocess,sys; j=json.load(sys.stdin); [print(p['metadata']['namespace'],p['metadata']['name']) for p in j['items'] if p['status'].get('reason')=='Evicted']" | xargs -r kubectl delete pod -n
+                  echo "done"
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 32Mi
+                limits:
+                  cpu: 100m
+                  memory: 64Mi
