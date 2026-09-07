@@ -25,6 +25,9 @@ data:
       Cluster:
         style: row
         columns: 2
+      Network:
+        style: row
+        columns: 2
   custom.css: |
     html, body {
       background-color: #0f2a1a !important;
@@ -68,6 +71,15 @@ data:
               type: argocd
               url: http://argocd-server.argocd.svc.cluster.local
               key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhcmdvY2QiLCJzdWIiOiJyZWFkb25seTphcGlLZXkiLCJuYmYiOjE3ODgwMDQ1MTcsImlhdCI6MTc4ODAwNDUxNywianRpIjoiYzJiNmJlNzctZjU2ZS00NzdiLTg2MGUtMTgyNTg5Y2NlNzQxIn0.bOORtPJp8UxHJFZf04yaqEV-J0b8c4bCDSMA431PFDY
+    - Network:
+        - MikroTik hAP ac:
+            href: http://192.168.1.1/
+            icon: mdi-router-network
+            description: Router
+        - TP-Link Archer C20:
+            href: http://192.168.1.2/
+            icon: mdi-access-point
+            description: WiFi access point
   widgets.yaml: |
     - kubernetes:
         cluster:
