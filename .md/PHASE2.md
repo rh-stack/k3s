@@ -119,7 +119,7 @@ To do:
 
 ```bash
 kubectl -n argocd create secret generic sops-age \
-  --from-file=keys.txt=/home/rythm/.config/sops/age/keys.txt \
+  --from-file=keys.txt=$HOME/.config/sops/age/keys.txt \
   --dry-run=client -o yaml | kubectl apply -f -
 ```
 
