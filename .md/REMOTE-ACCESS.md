@@ -60,8 +60,26 @@ Tailscale is not a k3s component:
    ```
    ls /dev/net/tun     # must print the path; an error here means step 2 is not active
    curl -fsSL https://tailscale.com/install.sh | sh    # official Tailscale installer
-   echo 'net.ipv4.ip_forward = 1' > /etc/sysctl.d/99-tailscale.conf
-   sysctl -q --system
+
+   # IP forwarding must be on for subnet routing. systemd-sysctl fails in this
+   # container (exit 243/CREDENTIALS), so no /etc/sysctl.d file is applied at
+   # boot. This unit sets the value instead, before tailscaled starts.
+   printf '%s\n' \
+     '[Unit]' \
+     'Description=Enable IPv4 forwarding for the Tailscale subnet router' \
+     'Before=tailscaled.service' \
+     '' \
+     '[Service]' \
+     'Type=oneshot' \
+     'RemainAfterExit=yes' \
+     'ExecStart=/usr/sbin/sysctl -w net.ipv4.ip_forward=1' \
+     '' \
+     '[Install]' \
+     'WantedBy=multi-user.target' \
+     > /etc/systemd/system/ip-forward.service
+   systemctl daemon-reload
+   systemctl enable --now ip-forward.service
+
    tailscale up --advertise-routes=192.168.1.0/24 --accept-dns=false
    tailscale status
    ```
@@ -69,9 +87,12 @@ Tailscale is not a k3s component:
    The `tailscale up` command prints a login URL. Open the URL in the laptop browser and authenticate. `--accept-dns=false` keeps the container on the router's DNS. Then check:
 
    ```
+   sysctl net.ipv4.ip_forward   # expect 1
    tailscale status
    tailscale ip -4
    ```
+
+   The health check in `tailscale status` must be clean. A reboot is then safe: the unit sets forwarding before `tailscaled` starts.
 
 ## Admin console **[You]**
 
@@ -105,7 +126,7 @@ curl -I http://argocd.k3s.lan
 
 In the laptop browser, open `https://192.168.1.3:8006` and expect the Proxmox login page.
 
-Failure signal: `100.x.y.z` and `192.168.1.7` reachable but `192.168.1.1` and `192.168.1.6` not -> the subnet route was not approved in the admin console.
+Failure signal: `100.x.y.z` and `192.168.1.7` reachable but `192.168.1.1` and `192.168.1.6` not -> check `sysctl net.ipv4.ip_forward` (expect 1) and `systemctl status ip-forward.service`; check route approval in the admin console only if forwarding is on.
 
 If `ls /dev/net/tun` in step 3 errors, or `tailscale up` reports a TUN error -> the two `lxc.*` lines are missing from the CT config or the CT was not restarted after step 2.
 
