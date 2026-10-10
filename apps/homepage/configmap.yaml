@@ -80,6 +80,11 @@ data:
             href: http://192.168.1.2/
             icon: mdi-access-point
             description: WiFi access point
+    - Maps:
+        - Weft:
+            href: http://weft.lan
+            icon: mdi-map
+            description: Homelab map
   widgets.yaml: |
     - kubernetes:
         cluster:

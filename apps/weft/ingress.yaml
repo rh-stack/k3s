@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: weft
+  namespace: weft
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: weft.lan
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: weft
+                port:
+                  number: 3000
