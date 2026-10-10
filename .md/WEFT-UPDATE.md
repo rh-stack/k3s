@@ -6,7 +6,6 @@ The running image lives only in k3s containerd. The tag in `apps/weft/deployment
 ## One-time setup (already done for 0.1.0)
 
 - Weft source plus `Dockerfile` lives in the weft repo. Keep a checkout on this VM to build from.
-- The local commit `cc89dc0` in `/tmp/weft` holds the `Dockerfile`. Push it to the weft repo so any machine can rebuild.
 
 ## Update flow for a new release
 
