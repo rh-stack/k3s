@@ -51,20 +51,20 @@ data:
   services.yaml: |
     - Media:
         - Jellyfin:
-            href: http://jf.k3s.lan
+            href: http://jf.lan
             icon: jellyfin
             description: Stream movies and shows
         - qBittorrent:
-            href: http://qb.k3s.lan
+            href: http://qb.lan
             icon: qbittorrent
             description: Downloads via NL-FREE#239
     - Cluster:
         - Headlamp:
-            href: http://headlamp.k3s.lan
+            href: http://headlamp.lan
             icon: headlamp
             description: Cluster view
         - Argo CD:
-            href: http://argocd.k3s.lan
+            href: http://argocd.lan
             icon: argo-cd
             description: GitOps sync
             widget:

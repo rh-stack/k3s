@@ -8,7 +8,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: qb.k3s.lan
+    - host: qb.lan
       http:
         paths:
           - path: /

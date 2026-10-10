@@ -8,7 +8,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: jf.k3s.lan
+    - host: jf.lan
       http:
         paths:
           - path: /

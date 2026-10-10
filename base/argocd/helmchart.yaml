@@ -19,12 +19,12 @@ spec:
       rbac:
         policy.csv: "g, readonly, role:readonly"
     global:
-      domain: argocd.k3s.lan
+      domain: argocd.lan
     server:
       ingress:
         enabled: true
         ingressClassName: traefik
-        hostname: argocd.k3s.lan
+        hostname: argocd.lan
     repoServer:
       volumes:
         - name: sops-age

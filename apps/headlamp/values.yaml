@@ -4,7 +4,7 @@ ingress:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
   hosts:
-    - host: headlamp.k3s.lan
+    - host: headlamp.lan
       paths:
         - path: /
           type: Prefix

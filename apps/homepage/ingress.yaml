@@ -15,7 +15,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: home.k3s.lan
+    - host: home.lan
       http:
         paths:
           - path: /

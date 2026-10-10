@@ -16,7 +16,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 7d0c198379cd5a9ad9829ac03a44a64ba0fafab481fa4d5a1ca9cb313c293441
+        checksum/config: 90b43309d7bce6fcba3bb40433b65a9df76bf006e0a20d501711272c7169a866
       labels:
         app.kubernetes.io/name: homepage
     spec:
@@ -41,7 +41,7 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
             - name: HOMEPAGE_ALLOWED_HOSTS
-              value: "$(MY_POD_IP):3000,home.k3s.lan,localhost:3000"
+              value: "$(MY_POD_IP):3000,home.lan,localhost:3000"
           ports:
             - name: http
               containerPort: 3000
